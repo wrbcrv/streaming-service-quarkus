@@ -18,6 +18,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     UsuarioRepository usuarioRepository;
 
     @Override
+    public List<UsuarioResponseDTO> getAll() {
+        return usuarioRepository.listAll().stream().map(e -> UsuarioResponseDTO.valueOf(e)).toList();
+    }
+
+    @Override
     @Transactional
     public UsuarioResponseDTO insert(UsuarioDTO usuarioDTO) {
         Usuario usuario = new Usuario();
@@ -31,13 +36,22 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public List<UsuarioResponseDTO> getAll() {
-        return usuarioRepository.listAll().stream().map(e -> UsuarioResponseDTO.valueOf(e)).toList();
+    @Transactional
+    public UsuarioResponseDTO update(Long usuarioId, UsuarioDTO usuarioDTO) {
+        Usuario usuario = usuarioRepository.findById(usuarioId);
+
+        if (usuario == null)
+            throw new NotFoundException("Usuário não encontrado");
+
+        usuario.setLogin(usuarioDTO.login());
+        usuario.setSenha(usuarioDTO.senha());
+
+        return UsuarioResponseDTO.valueOf(usuario);
     }
 
     @Override
-    public UsuarioResponseDTO findById(Long id) {
-        Usuario usuario = usuarioRepository.findById(id);
+    public UsuarioResponseDTO findById(Long usuarioId) {
+        Usuario usuario = usuarioRepository.findById(usuarioId);
         if (usuario == null)
             throw new NotFoundException("Usuário não encontrado");
 
