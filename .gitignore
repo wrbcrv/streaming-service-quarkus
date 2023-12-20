@@ -1,43 +1,23 @@
-#Maven
-target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-release.properties
-.flattened-pom.xml
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Eclipse
-.project
-.classpath
-.settings/
-bin/
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# IntelliJ
-.idea
-*.ipr
-*.iml
-*.iws
+# testing
+/coverage
 
-# NetBeans
-nb-configuration.xml
+# production
+/build
 
-# Visual Studio Code
-.vscode
-.factorypath
-
-# OSX
+# misc
 .DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Vim
-*.swp
-*.swo
-
-# patch
-*.orig
-*.rej
-
-# Local environment
-.env
-
-# Plugin directory
-/.quarkus/cli/plugins/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
