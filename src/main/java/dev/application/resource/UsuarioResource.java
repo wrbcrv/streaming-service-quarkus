@@ -57,7 +57,7 @@ public class UsuarioResource {
             return Response.ok(usuario).build();
         } catch (ConstraintViolationException e) {
             Result result = new Result(e.getConstraintViolations());
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(result).build();
+            return Response.status(Status.NOT_FOUND).entity(result).build();
         }
     }
 

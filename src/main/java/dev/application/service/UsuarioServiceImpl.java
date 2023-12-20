@@ -41,7 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioResponseDTO update(Long usuarioId, UsuarioDTO usuarioDTO) throws ConstraintViolationException {
+    public UsuarioResponseDTO update(@Valid Long usuarioId, UsuarioDTO usuarioDTO) throws ConstraintViolationException {
         Usuario usuario = usuarioRepository.findById(usuarioId);
 
         if (usuario == null)
