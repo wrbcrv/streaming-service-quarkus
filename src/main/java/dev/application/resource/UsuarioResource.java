@@ -3,10 +3,12 @@ package dev.application.resource;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import dev.application.application.Result;
 import dev.application.dto.UsuarioDTO;
 import dev.application.dto.UsuarioResponseDTO;
 import dev.application.service.UsuarioService;
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
@@ -16,6 +18,7 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Path("/usuarios")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -36,12 +39,13 @@ public class UsuarioResource {
     }
 
     @POST
-    public Response insert(UsuarioDTO dto) {
+    public Response insert(UsuarioDTO usuarioDTO) {
         try {
-            UsuarioResponseDTO usuario = usuarioService.insert(dto);
+            UsuarioResponseDTO usuario = usuarioService.insert(usuarioDTO);
             return Response.ok(usuario).build();
-        } catch (Exception e) {
-            return Response.status(500).entity("Erro ao criar usuário").build();
+        } catch (ConstraintViolationException e) {
+            Result result = new Result(e.getConstraintViolations());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(result).build();
         }
     }
 
@@ -51,8 +55,9 @@ public class UsuarioResource {
         try {
             UsuarioResponseDTO usuario = usuarioService.update(usuarioId, usuarioDTO);
             return Response.ok(usuario).build();
-        } catch (Exception e) {
-            return Response.status(500).entity("Erro ao atualizar usuário").build();
+        } catch (ConstraintViolationException e) {
+            Result result = new Result(e.getConstraintViolations());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(result).build();
         }
     }
 
@@ -63,9 +68,10 @@ public class UsuarioResource {
             UsuarioResponseDTO usuario = usuarioService.findById(usuarioId);
             return Response.ok(usuario).build();
         } catch (NoSuchElementException e) {
-            return Response.status(404).entity("Usuário não encontrado").build();
+            return Response.status(Status.NOT_FOUND).entity("Usuário não encontrado").build();
         } catch (Exception e) {
-            return Response.status(500).entity("Erro ao buscar usuário por ID: " + e.getMessage()).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao buscar usuário por ID: " + e.getMessage()).build();
         }
     }
 }
