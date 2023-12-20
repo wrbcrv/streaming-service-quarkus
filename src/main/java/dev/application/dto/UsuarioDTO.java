@@ -1,10 +1,10 @@
 package dev.application.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 public record UsuarioDTO(
-        @NotNull(message = "Login é obrigatório")
+        @NotBlank(message = "Login é obrigatório")
         String login,
-        @NotNull(message = "Senha é obrigatório")
+        @NotBlank(message = "Senha é obrigatório")
         String senha) {
 }

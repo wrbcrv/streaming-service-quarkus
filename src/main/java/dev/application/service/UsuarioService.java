@@ -9,5 +9,7 @@ public interface UsuarioService {
     
     List<UsuarioResponseDTO> getAll();
 
-    UsuarioResponseDTO create(UsuarioDTO usuarioDTO);
+    UsuarioResponseDTO insert(UsuarioDTO usuarioDTO);
+
+    UsuarioResponseDTO findById(Long id);
 }
