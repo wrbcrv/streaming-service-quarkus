@@ -4,6 +4,7 @@ import java.util.List;
 
 import dev.application.dto.UsuarioDTO;
 import dev.application.dto.UsuarioResponseDTO;
+import dev.application.model.Perfil;
 import dev.application.model.Usuario;
 import dev.application.repository.UsuarioRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,6 +32,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setLogin(usuarioDTO.login());
         usuario.setSenha(usuarioDTO.senha());
+        usuario.setPerfil(Perfil.valueOf(usuarioDTO.idPerfil()));
 
         usuarioRepository.persist(usuario);
 
@@ -39,7 +41,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioResponseDTO update(Long usuarioId, UsuarioDTO usuarioDTO) {
+    public UsuarioResponseDTO update(Long usuarioId, UsuarioDTO usuarioDTO) throws ConstraintViolationException {
         Usuario usuario = usuarioRepository.findById(usuarioId);
 
         if (usuario == null)
@@ -47,6 +49,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         usuario.setLogin(usuarioDTO.login());
         usuario.setSenha(usuarioDTO.senha());
+        usuario.setPerfil(Perfil.valueOf(usuarioDTO.idPerfil()));
 
         return UsuarioResponseDTO.valueOf(usuario);
     }
