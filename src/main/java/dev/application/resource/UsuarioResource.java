@@ -52,6 +52,23 @@ public class UsuarioResource {
         } catch (ConstraintViolationException e) {
             Result result = new Result(e.getConstraintViolations());
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(result).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Status.BAD_REQUEST).entity("Erro ao inserir perfil: " + e.getMessage()).build();
+        }
+    }
+
+    @PATCH
+    @Path("/{usuarioId}")
+    @RolesAllowed({ "Admin", "User" })
+    public Response update(@PathParam("usuarioId") Long usuarioId, UsuarioDTO usuarioDTO) {
+        try {
+            UsuarioResponseDTO usuario = usuarioService.update(usuarioId, usuarioDTO);
+            return Response.ok(usuario).build();
+        } catch (ConstraintViolationException e) {
+            Result result = new Result(e.getConstraintViolations());
+            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(result).build();
+        } catch (IllegalArgumentException e) {
+            return Response.status(Status.BAD_REQUEST).entity("Erro ao inserir perfil: " + e.getMessage()).build();
         }
     }
 
@@ -67,19 +84,6 @@ public class UsuarioResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity("Erro ao excluir o usuário. Detalhes: " + e.getMessage())
                     .build();
-        }
-    }
-
-    @PATCH
-    @Path("/{usuarioId}")
-    @RolesAllowed({ "Admin", "User" })
-    public Response update(@PathParam("usuarioId") Long usuarioId, UsuarioDTO usuarioDTO) {
-        try {
-            UsuarioResponseDTO usuario = usuarioService.update(usuarioId, usuarioDTO);
-            return Response.ok(usuario).build();
-        } catch (ConstraintViolationException e) {
-            Result result = new Result(e.getConstraintViolations());
-            return Response.status(Status.INTERNAL_SERVER_ERROR).entity(result).build();
         }
     }
 
