@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - front-live
+  pull_request:
+    branches:
+      - front-live
 
 jobs:
   build:
