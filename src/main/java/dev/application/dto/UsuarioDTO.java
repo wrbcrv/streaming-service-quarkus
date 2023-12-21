@@ -10,6 +10,6 @@ public record UsuarioDTO(
         @NotBlank(message = "Senha é obrigatório")
         @Size(min = 8, message = "A senha deve ter pelo menos 8 caracteres")
         String senha,
-        @NotNull(message = "Perfil é obrigatório.")
+        @NotNull(message = "Perfil é obrigatório")
         Integer idPerfil) {
 }

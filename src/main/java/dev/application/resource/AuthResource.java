@@ -5,6 +5,7 @@ import dev.application.dto.UsuarioResponseDTO;
 import dev.application.service.HashService;
 import dev.application.service.JwtService;
 import dev.application.service.UsuarioService;
+import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
@@ -31,6 +32,7 @@ public class AuthResource {
 
   @POST
   @Produces(MediaType.TEXT_PLAIN)
+  @PermitAll
   public Response login(@Valid AuthDTO authDTO) {
     String hash = hashService.getSenhaHash(authDTO.senha());
 

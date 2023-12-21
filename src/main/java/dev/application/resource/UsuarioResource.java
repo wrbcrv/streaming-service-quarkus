@@ -12,6 +12,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
@@ -37,7 +38,8 @@ public class UsuarioResource {
             List<UsuarioResponseDTO> usuarios = usuarioService.getAll();
             return Response.ok(usuarios).build();
         } catch (Exception e) {
-            return Response.status(500).entity("Erro ao obter todos os usuários: " + e.getMessage()).build();
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao obter todos os usuários: " + e.getMessage()).build();
         }
     }
 
@@ -53,9 +55,24 @@ public class UsuarioResource {
         }
     }
 
+    @DELETE
+    @RolesAllowed({ "Admin", "User" })
+    @Path("/{usuarioId}")
+    public Response delete(@PathParam("usuarioId") Long usuarioId) {
+        try {
+            usuarioService.delete(usuarioId);
+            return Response.ok("Usuário excluído com sucesso").build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("Erro ao excluir o usuário. Detalhes: " + e.getMessage())
+                    .build();
+        }
+    }
+
     @PATCH
     @Path("/{usuarioId}")
-    @RolesAllowed({"Admin", "User"})
+    @RolesAllowed({ "Admin", "User" })
     public Response update(@PathParam("usuarioId") Long usuarioId, UsuarioDTO usuarioDTO) {
         try {
             UsuarioResponseDTO usuario = usuarioService.update(usuarioId, usuarioDTO);
@@ -68,7 +85,7 @@ public class UsuarioResource {
 
     @GET
     @Path("/{usuarioId}")
-     @RolesAllowed({"Admin", "User"})
+    @RolesAllowed({ "Admin", "User" })
     public Response findById(@PathParam("usuarioId") Long usuarioId) {
         try {
             UsuarioResponseDTO usuario = usuarioService.findById(usuarioId);

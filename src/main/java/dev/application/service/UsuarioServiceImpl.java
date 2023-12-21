@@ -58,8 +58,15 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
+    @Transactional
+    public void delete(Long usuarioId) {
+        usuarioRepository.deleteById(usuarioId);
+    }
+
+    @Override
     public UsuarioResponseDTO findById(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId);
+        
         if (usuario == null)
             throw new NotFoundException("Usuário não encontrado");
 
