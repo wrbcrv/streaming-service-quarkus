@@ -34,13 +34,20 @@ public class AuthResource {
   @Produces(MediaType.TEXT_PLAIN)
   @PermitAll
   public Response login(@Valid AuthDTO authDTO) {
-    String hash = hashService.getSenhaHash(authDTO.senha());
+    try {
+      String hash = hashService.getSenhaHash(authDTO.senha());
 
-    UsuarioResponseDTO usuario = usuarioService.findByLoginAndSenha(authDTO.login(), hash);
+      UsuarioResponseDTO usuario = usuarioService.findByLoginAndSenha(authDTO.login(), hash);
 
-    if (usuario == null)
-      return Response.status(Status.NOT_FOUND).entity("Usuário não encontrado.").build();
+      if (usuario == null)
+        return Response.status(Status.NOT_FOUND).entity("Usuário não encontrado.").build();
 
-    return Response.ok().header("Authorization", jwtService.generateJwt(usuario)).build();
+      return Response.ok().header("Authorization", jwtService.generateJwt(usuario)).build();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return Response.status(Status.INTERNAL_SERVER_ERROR)
+          .entity("Erro ao processar solicitação: " + e.getMessage())
+          .build();
+    }
   }
 }
