@@ -45,7 +45,7 @@ public class HashServiceImpl implements HashService {
         try {
             secureRandom = SecureRandom.getInstanceStrong();
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Erro ao inicializar o gerador de números aleatórios seguro.", e);
+            throw new RuntimeException("Erro ao inicializar.", e);
         }
 
         byte[] salt = new byte[16];
