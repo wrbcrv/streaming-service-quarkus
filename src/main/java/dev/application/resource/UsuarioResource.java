@@ -7,6 +7,8 @@ import dev.application.application.Result;
 import dev.application.dto.UsuarioDTO;
 import dev.application.dto.UsuarioResponseDTO;
 import dev.application.service.UsuarioService;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.Consumes;
@@ -29,6 +31,7 @@ public class UsuarioResource {
     UsuarioService usuarioService;
 
     @GET
+    @RolesAllowed({ "Admin" })
     public Response getAll() {
         try {
             List<UsuarioResponseDTO> usuarios = usuarioService.getAll();
@@ -39,6 +42,7 @@ public class UsuarioResource {
     }
 
     @POST
+    @PermitAll
     public Response insert(UsuarioDTO usuarioDTO) {
         try {
             UsuarioResponseDTO usuario = usuarioService.insert(usuarioDTO);
@@ -51,6 +55,7 @@ public class UsuarioResource {
 
     @PATCH
     @Path("/{usuarioId}")
+    @RolesAllowed({"Admin", "User"})
     public Response update(@PathParam("usuarioId") Long usuarioId, UsuarioDTO usuarioDTO) {
         try {
             UsuarioResponseDTO usuario = usuarioService.update(usuarioId, usuarioDTO);
@@ -63,6 +68,7 @@ public class UsuarioResource {
 
     @GET
     @Path("/{usuarioId}")
+     @RolesAllowed({"Admin", "User"})
     public Response findById(@PathParam("usuarioId") Long usuarioId) {
         try {
             UsuarioResponseDTO usuario = usuarioService.findById(usuarioId);

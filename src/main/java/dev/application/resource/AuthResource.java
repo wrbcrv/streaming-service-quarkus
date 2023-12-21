@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.Response.Status;
 public class AuthResource {
 
   @Inject
-  UsuarioService service;
+  UsuarioService usuarioService;
 
   @Inject
   HashService hashService;
@@ -34,15 +34,11 @@ public class AuthResource {
   public Response login(@Valid AuthDTO authDTO) {
     String hash = hashService.getSenhaHash(authDTO.senha());
 
-    UsuarioResponseDTO usuario = null;
+    UsuarioResponseDTO usuario = usuarioService.findByLoginAndSenha(authDTO.login(), hash);
 
     if (usuario == null)
-      return Response.status(Status.NOT_FOUND)
-          .entity("Usuário não encontrado.")
-          .build();
+      return Response.status(Status.NOT_FOUND).entity("Usuário não encontrado.").build();
 
-    return Response.ok()
-        .header("Authorization", jwtService.generateJwt(usuario))
-        .build();
+    return Response.ok().header("Authorization", jwtService.generateJwt(usuario)).build();
   }
 }

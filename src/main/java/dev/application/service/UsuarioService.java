@@ -16,4 +16,8 @@ public interface UsuarioService {
     UsuarioResponseDTO update(@Valid Long usuarioId, UsuarioDTO usuarioDTO) throws ConstraintViolationException;
 
     UsuarioResponseDTO findById(Long usuarioId);
+
+    UsuarioResponseDTO findByLogin(String login);
+
+    UsuarioResponseDTO findByLoginAndSenha(String login, String senha);
 }
