@@ -20,6 +20,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Inject
     UsuarioRepository usuarioRepository;
 
+    @Inject
+    HashServiceImpl hashServiceImpl;
+
     @Override
     public List<UsuarioResponseDTO> getAll() {
         return usuarioRepository.listAll().stream().map(e -> UsuarioResponseDTO.valueOf(e)).toList();
@@ -31,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario usuario = new Usuario();
 
         usuario.setLogin(usuarioDTO.login());
-        usuario.setSenha(usuarioDTO.senha());
+        usuario.setSenha(hashServiceImpl.getSenhaHash(usuarioDTO.senha()));
         usuario.setPerfil(Perfil.valueOf(usuarioDTO.idPerfil()));
 
         usuarioRepository.persist(usuario);
@@ -48,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new NotFoundException("Usuário não encontrado");
 
         usuario.setLogin(usuarioDTO.login());
-        usuario.setSenha(usuarioDTO.senha());
+        usuario.setSenha(hashServiceImpl.getSenhaHash(usuarioDTO.senha()));
         usuario.setPerfil(Perfil.valueOf(usuarioDTO.idPerfil()));
 
         return UsuarioResponseDTO.valueOf(usuario);
