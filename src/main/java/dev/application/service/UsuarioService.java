@@ -14,5 +14,9 @@ public interface UsuarioService {
 
     UsuarioResponseDTO update(Long usuarioId, UsuarioDTO usuarioDTO);
 
+    UsuarioResponseDTO updateLogin(String usuarioLogin, UsuarioDTO usuarioDTO);
+
     UsuarioResponseDTO findById(Long usuarioId);
+
+    UsuarioResponseDTO findByLogin(String usuarioLogin);
 }

@@ -57,4 +57,28 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         return UsuarioResponseDTO.valueOf(usuario);
     }
+    @Override
+    public UsuarioResponseDTO findByLogin(String usuarioLogin){
+        Usuario usuario = (Usuario) usuarioRepository.findByLogin(usuarioLogin);
+         if (usuario == null)
+            throw new NotFoundException("Usuário não encontrado");
+
+
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
+
+    @Override
+    public UsuarioResponseDTO updateLogin(String usuarioLogin, UsuarioDTO usuarioDTO) {
+
+        Usuario usuario = usuarioRepository.findByLogin(usuarioLogin);
+      
+        if(usuario == null)
+        throw new UnsupportedOperationException("Unimplemented method 'updateLogin'");
+
+         usuario.setLogin(usuarioDTO.login());
+         usuario.setSenha(usuarioDTO.senha());
+
+
+        return UsuarioResponseDTO.valueOf(usuario);
+    }
 }
