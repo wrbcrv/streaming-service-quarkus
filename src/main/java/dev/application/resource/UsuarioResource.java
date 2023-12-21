@@ -68,4 +68,27 @@ public class UsuarioResource {
             return Response.status(500).entity("Erro ao buscar usuário por ID: " + e.getMessage()).build();
         }
     }
+    @PATCH
+    @Path("/atualizarLogin/{usuarioLogin}")
+    public Response updateLogin(@PathParam("usuarioLogin") String usuarioLogin, UsuarioDTO usuarioDTO) {
+         try {
+        UsuarioResponseDTO usuario = usuarioService.updateLogin(usuarioLogin, usuarioDTO);
+             return Response.ok(usuario).build();
+    } catch (Exception e) {
+        return Response.status(500).entity("Erro ao atualizar usuário").build();
+    }
+}
+
+    @GET
+    @Path("/buscarPorLogin/{usuarioLogin}")
+    public Response findByLogin(@PathParam("usuarioLogin") String usuarioLogin) {
+        try {
+        UsuarioResponseDTO usuario = usuarioService.findByLogin(usuarioLogin);
+             return Response.ok(usuario).build();
+    } catch (NoSuchElementException e) {
+          return Response.status(404).entity("Usuário não encontrado").build();
+    } catch (Exception e) {
+           return Response.status(500).entity("Erro ao buscar usuário por Login: " + e.getMessage()).build();
+    }
+}
 }
